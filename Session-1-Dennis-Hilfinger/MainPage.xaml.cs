@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
+using System.Threading.Tasks;
 
 namespace Session_1_Dennis_Hilfinger
 {
@@ -11,10 +12,15 @@ namespace Session_1_Dennis_Hilfinger
         }
 
 
-        private void ImportStaffData(object sender, EventArgs e)
+        private async void ImportStaffData(object sender, EventArgs e)
         {
-
-            GetStaffDataFromFile();
+            try
+            {
+                GetStaffDataFromFile();
+            } catch (Exception ex)
+            {
+                await DisplayAlert("Error", "Error occurred while importing staff data", "Ok");
+            }
         }
 
         private async void GetStaffDataFromFile()
@@ -27,42 +33,50 @@ namespace Session_1_Dennis_Hilfinger
                 if (filePath.Trim().EndsWith(".csv"))
                 {
                     var lines = File.ReadAllLines(filePath);
-                    if (lines[0].Split(',').Length == 10)
+                    if (lines[0].Split(';').Length == 10)
                     {
-                            
+
                         var staffDataList = lines.ToList();
                         staffDataList.RemoveAt(0);
-                        foreach (var line in staffDataList)
+
+                        using (var db = new MarathonDB())
                         {
-                            var data = line.Split(',');
 
-                            var names = data[1].Replace('*', ' ').Replace('#', ' ').Replace('|', ' ');
-                            var firstname = names.Split(' ')[0].Trim();
-                            var lastname = names.Split(' ')[1].Trim();
-
-                            var gender = data[3];
-                            if (data[3].Trim().ToLower().StartsWith("fema"))
-                                gender = "F";
-                            else if (data[3].Trim().ToLower().StartsWith("male"))
-                                gender = "M";
-                            using (var db = new MarathonDB())
+                            foreach (var line in staffDataList)
                             {
-                                var PositionsExists = db.StaffPositions.Any(p => p.PositionId == int.Parse(data[4]));
-                                if (!PositionsExists)
+                                var data = line.Split(';');
+
+                                var names = data[1].Replace('*', ' ').Replace('#', ' ').Replace('|', ' ');
+                                var splittedName = names.Split(' ');
+                                var firstname = splittedName[0].Trim();
+                                var lastname = splittedName[splittedName.Length - 1].Trim();
+
+                                var gender = data[3];
+                                if (data[3].Trim().ToLower().StartsWith("fema"))
+                                    gender = "F";
+                                else if (data[3].Trim().ToLower().StartsWith("male"))
+                                    gender = "M";
+
+                                var period = "Y";
+                                if (data[7].Trim().ToLower().StartsWith("h"))
+                                {
+                                    period = "H";
+                                }
+
+                                var staffPositionExists = db.StaffPositions.Any(p => p.PositionId == int.Parse(data[4]));
+                                if (!staffPositionExists)
                                 {
                                     db.StaffPositions.Add(new StaffPosition()
                                     {
                                         PositionId = int.Parse(data[4]),
                                         PositionName = data[5],
                                         PositionDescription = data[6],
-                                        PayPeriod = data[7],
-                                        PayRate = data[8].Replace('$', ' ') + "," + data[9],
+                                        PayPeriod = period,
+                                        PayRate = data[8].Replace('$', ' '),
                                     });
                                     db.SaveChanges();
                                 }
-                            }
 
-                            using (var db = new MarathonDB()) {
                                 var staffExists = db.Staff.Any(s => s.StaffId == int.Parse(data[0]));
                                 if (!staffExists)
                                 {
@@ -74,23 +88,45 @@ namespace Session_1_Dennis_Hilfinger
                                         DateOfBirth = DateOnly.Parse(data[2]),
                                         Gender = gender,
                                         PositionId = int.Parse(data[4]),
-                                        Email = data[10],
+                                        Email = data[9],
                                     });
 
                                     db.SaveChanges();
                                 }
-                            }   
+                            }
                         }
+                            
                     }
-                    else if (lines[0].Split(',').Length == 5)
+                    else if (lines[0].Split(';').Length == 5)
                     {
                         var timesheetDataList = lines.ToList();
                         timesheetDataList.RemoveAt(0);
-                        foreach (var line in timesheetDataList)
+                        using (var db = new MarathonDB())
                         {
-                            var data = line.Split(',');
+                            List<StaffTimesheet> timesheets = db.StaffTimesheets.ToList();
+                            foreach (var line in timesheetDataList)
+                            {
+                                var data = line.Split(';');
 
+                                var timesheet = new StaffTimesheet()
+                                {
+                                    TimesheetId = int.Parse(data[0]),
+                                    StaffId = int.Parse(data[1]),
+                                    StartDateTime = DateTime.Parse(data[2]),
+                                    EndDateTime = DateTime.Parse(data[3]),
+                                    PayAmount = data[4]
+                                };
+
+                                if (!timesheets.Contains(timesheet))
+                                {
+                                    timesheets.Add(timesheet);
+                                    db.StaffTimesheets.Add(timesheet);
+                                }
+
+                            }
+                            db.SaveChanges();
                         }
+                        
                     }
                     else
                     {
