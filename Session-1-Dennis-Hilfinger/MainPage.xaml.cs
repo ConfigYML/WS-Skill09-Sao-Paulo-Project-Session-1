@@ -1,0 +1,114 @@
+﻿using Microsoft.UI.Xaml;
+
+namespace Session_1_Dennis_Hilfinger
+{
+    public partial class MainPage : ContentPage
+    {
+
+        public MainPage()
+        {
+            InitializeComponent();
+        }
+
+
+        private void ImportStaffData(object sender, EventArgs e)
+        {
+
+            GetStaffDataFromFile();
+        }
+
+        private async void GetStaffDataFromFile()
+        {
+            
+            var file = await FilePicker.PickAsync(PickOptions.Default);
+            if (file != null)
+            {
+                var filePath = file.FullPath;
+                if (filePath.Trim().EndsWith(".csv"))
+                {
+                    var lines = File.ReadAllLines(filePath);
+                    if (lines[0].Split(',').Length == 10)
+                    {
+                            
+                        var staffDataList = lines.ToList();
+                        staffDataList.RemoveAt(0);
+                        foreach (var line in staffDataList)
+                        {
+                            var data = line.Split(',');
+
+                            var names = data[1].Replace('*', ' ').Replace('#', ' ').Replace('|', ' ');
+                            var firstname = names.Split(' ')[0].Trim();
+                            var lastname = names.Split(' ')[1].Trim();
+
+                            var gender = data[3];
+                            if (data[3].Trim().ToLower().StartsWith("fema"))
+                                gender = "F";
+                            else if (data[3].Trim().ToLower().StartsWith("male"))
+                                gender = "M";
+                            using (var db = new MarathonDB())
+                            {
+                                var PositionsExists = db.StaffPositions.Any(p => p.PositionId == int.Parse(data[4]));
+                                if (!PositionsExists)
+                                {
+                                    db.StaffPositions.Add(new StaffPosition()
+                                    {
+                                        PositionId = int.Parse(data[4]),
+                                        PositionName = data[5],
+                                        PositionDescription = data[6],
+                                        PayPeriod = data[7],
+                                        PayRate = data[8].Replace('$', ' ') + "," + data[9],
+                                    });
+                                    db.SaveChanges();
+                                }
+                            }
+
+                            using (var db = new MarathonDB()) {
+                                var staffExists = db.Staff.Any(s => s.StaffId == int.Parse(data[0]));
+                                if (!staffExists)
+                                {
+                                    db.Staff.Add(new Staff()
+                                    {
+                                        StaffId = int.Parse(data[0]),
+                                        Firstname = firstname,
+                                        Lastname = lastname,
+                                        DateOfBirth = DateOnly.Parse(data[2]),
+                                        Gender = gender,
+                                        PositionId = int.Parse(data[4]),
+                                        Email = data[10],
+                                    });
+
+                                    db.SaveChanges();
+                                }
+                            }   
+                        }
+                    }
+                    else if (lines[0].Split(',').Length == 5)
+                    {
+                        var timesheetDataList = lines.ToList();
+                        timesheetDataList.RemoveAt(0);
+                        foreach (var line in timesheetDataList)
+                        {
+                            var data = line.Split(',');
+
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Incorrect format", "Data was not in correct format to import staff or staff timesheet data. View README for more info.", "Ok");
+                        return;
+                    }
+
+                }
+                else
+                {
+                    await DisplayAlert("Wrong file selected", "Please select a .csv file for importing staff data!", "Close");
+                    return;
+                }
+            }
+        }
+
+
+
+
+    }
+}
