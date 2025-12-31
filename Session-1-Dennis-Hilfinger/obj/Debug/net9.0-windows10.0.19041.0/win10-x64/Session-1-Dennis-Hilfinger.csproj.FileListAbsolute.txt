@@ -860,3 +860,4 @@ C:\2_WorldSkills\Training\Sao_Paulo_2015\WS-Skill09-Sao-Paulo-Project-Session-1\
 C:\2_WorldSkills\Training\Sao_Paulo_2015\WS-Skill09-Sao-Paulo-Project-Session-1\Session-1-Dennis-Hilfinger\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
 C:\2_WorldSkills\Training\Sao_Paulo_2015\WS-Skill09-Sao-Paulo-Project-Session-1\Executable\net9.0-windows10.0.19041.0\win10-x64\logo_2015_full_colour.scale-100.png
 C:\2_WorldSkills\Training\Sao_Paulo_2015\WS-Skill09-Sao-Paulo-Project-Session-1\Session-1-Dennis-Hilfinger\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\logo_2015_full_colour.scale-100.png
+C:\2_WorldSkills\Training\Sao_Paulo_2015\WS-Skill09-Sao-Paulo-Project-Session-1\Executable\net9.0-windows10.0.19041.0\win10-x64\charity_descriptions.pdf

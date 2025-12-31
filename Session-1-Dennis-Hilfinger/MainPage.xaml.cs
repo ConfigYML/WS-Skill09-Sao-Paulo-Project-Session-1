@@ -5,19 +5,34 @@ namespace Session_1_Dennis_Hilfinger
 {
     public partial class MainPage : ContentPage
     {
-
+        DispatcherTimer timer = new DispatcherTimer();
         public MainPage()
         {
             InitializeComponent();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timerTick;
+            timer.Start();
         }
 
+        private void timerTick(object? sender, object e)
+        {
+            DateTime targetTime = new DateTime(2026, 9, 5, 6, 0, 0);
+            DateTime currentTime = DateTime.Now;
+            TimeSpan timeDiff = targetTime - currentTime;
+
+            TimerLabel.Text = string.Format("{0} days {1} hours and {2} minutes until the race starts!",
+                timeDiff.Days,
+                timeDiff.Hours,
+                timeDiff.Minutes);
+        }
 
         private async void ImportStaffData(object sender, EventArgs e)
         {
             try
             {
                 GetStaffDataFromFile();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 await DisplayAlert("Error", "Error occurred while importing staff data", "Ok");
             }
@@ -25,7 +40,7 @@ namespace Session_1_Dennis_Hilfinger
 
         private async void GetStaffDataFromFile()
         {
-            
+
             var file = await FilePicker.PickAsync(PickOptions.Default);
             if (file != null)
             {
@@ -95,7 +110,7 @@ namespace Session_1_Dennis_Hilfinger
                                 }
                             }
                         }
-                            
+
                     }
                     else if (lines[0].Split(';').Length == 5)
                     {
@@ -126,7 +141,7 @@ namespace Session_1_Dennis_Hilfinger
                             }
                             db.SaveChanges();
                         }
-                        
+
                     }
                     else
                     {
@@ -144,7 +159,26 @@ namespace Session_1_Dennis_Hilfinger
         }
 
 
+        private async void BecomeRunner(object sender, EventArgs e)
+        {
+            await DisplayAlert("Work in progress", "This feature is not implemented yet", "Ok");
+            //AppShell.Current.GoToAsync("RunnerRegistrationPage");
+        }
 
+        private async void SponsorRunner(object sender, EventArgs e)
+        {
+            AppShell.Current.GoToAsync("SponsorRunnerPage");
+        }
 
+        private async void FindOutMore(object sender, EventArgs e)
+        {
+            AppShell.Current.GoToAsync("FindOutMorePage");
+        }
+
+        private async void Login(object sender, EventArgs e)
+        {
+            await DisplayAlert("Work in progress", "This feature is not implemented yet", "Ok");
+            //AppShell.Current.GoToAsync("RunnerRegistrationPage");
+        }
     }
 }

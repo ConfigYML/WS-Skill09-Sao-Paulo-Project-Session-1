@@ -17,71 +17,81 @@
                 Margin="20"/>
             <Label 
                 Grid.Column="1"
-                FontSize="32"
+                FontSize="40"
                 Text="MarathonSkills 2015"
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
                 Padding="20"/>
         </Grid>
 
+        <ScrollView
+            Grid.Row="1">
+            <VerticalStackLayout
+                Padding="30"
+                Spacing="25"
+                VerticalOptions="Center">
 
-        <VerticalStackLayout
-            Grid.Row="1"
-            Padding="30"
-            Spacing="25"
-            VerticalOptions="Center">
+                <Button
+                    Text="Import staff data"
+                    Style="{StaticResource ButtonGreen}"
+                    WidthRequest="200"
+                    HeightRequest="50"
+                    HorizontalOptions="End"
+                    Clicked="ImportStaffData"/>
 
-            <Button
-                Text="Import staff data"
-                Style="{StaticResource ButtonGreen}"
-                HorizontalOptions="End"
-                Clicked="ImportStaffData"/>
+                <Label 
+                    Text="Sao Paulo, Brazil"
+                    HorizontalOptions="Center"
+                    FontSize="32"/>
+                <Label 
+                    Text="Saturday September 5th 2015"
+                    HorizontalOptions="Center"
+                    FontSize="32"/>
 
-            <Label 
-                Text="Sao Paulo, Brazil"
-                HorizontalOptions="Center"
-                FontSize="32"/>
-            <Label 
-                Text="Saturday September 5th 2015"
-                HorizontalOptions="Center"
-                FontSize="32"/>
+                <Button
+                    Text="I want to be a runner"
+                    WidthRequest="300"
+                    HeightRequest="50"
+                    FontSize="16"
+                    Style="{StaticResource ButtonYellow}"
+                    HorizontalOptions="Center"
+                    Clicked="BecomeRunner"/>
 
-            <Button
-                Text="I want to be a runner"
-                WidthRequest="300"
-                HeightRequest="50"
-                FontSize="16"
-                Style="{StaticResource ButtonYellow}"
-                HorizontalOptions="Center"/>
+                <Button
+                    Text="I want to sponsor a runner"
+                    WidthRequest="300"
+                    HeightRequest="50"
+                    FontSize="16"
+                    Style="{StaticResource ButtonYellow}"
+                    HorizontalOptions="Center"
+                    Clicked="SponsorRunner"/>
 
-            <Button
-                Text="I want to sponsor a runner"
-                WidthRequest="300"
-                HeightRequest="50"
-                FontSize="16"
-                Style="{StaticResource ButtonYellow}"
-                HorizontalOptions="Center"/>
+                <Button
+                    Text="I want to find out more"
+                    WidthRequest="300"
+                    HeightRequest="50"
+                    FontSize="16"
+                    Style="{StaticResource ButtonYellow}"
+                    HorizontalOptions="Center"
+                    Clicked="FindOutMore"/>
 
-            <Button
-                Text="I want to find out more"
-                WidthRequest="300"
-                HeightRequest="50"
-                FontSize="16"
-                Style="{StaticResource ButtonYellow}"
-                HorizontalOptions="Center"/>
+                <Button 
+                    Text="Login"
+                    WidthRequest="200"
+                    HeightRequest="50"
+                    Style="{StaticResource ButtonBlue}"
+                    HorizontalOptions="End"
+                    Clicked="Login"/>   
 
-            <Button
-                Text="Login"
-                Style="{StaticResource ButtonBlue}"
-                HorizontalOptions="End"/>
-
-        </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
 
         <Label 
+            x:Name="TimerLabel"
             Grid.Row="2"
             HorizontalOptions="Fill"
             VerticalOptions="End"
-            Text="0 days 0 hours 0 minutes until the race starts!"
+            Text="0 days 0 hours and 0 minutes until the race starts!"
             HorizontalTextAlignment="Center"
             Padding="20"
             Style="{StaticResource TimerLabel}"/>

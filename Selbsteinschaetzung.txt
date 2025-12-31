@@ -1,0 +1,7 @@
+Selbsteinschätzung nach Ablauf der Zeit:
+
+- Definitiv zu langsam vor allem bei Datenimport (Staff Data)
+- Daher die Frage: wie macht man solche Imports am effizientesten? Dieses Mal habe ich anstelle von WPF auf MAUI gesetzt. Allerdings war ich dadurch in vielen Aspekten deutlich langsamer. Hauptsächlich hat mich jedoch die Datenbank aufgehalten, da der Datenimport der CSV-Dateien zu lange dauert mit einer automatisierten Lösung. Sollte man hier den Punkt für eine automatisierte Lösung liegen lassen oder wie ist das am sinnvollsten?
+- Viele grundlegende Dinge musste ich im Nachhinein nachschauen, da der Bezug zu MAUI bisher fehlt nach dem Umstieg von WPF; UI-Design noch sehr schleppend und ineffizient.
+- PDF anzeigen für die Liste der Charities musste ich komplett nachschauen -> Wie löst man so etwas? Alle Daten abtippen definitiv keine Option, da viel zu zeitintensiv
+- Timer Einbindung in meiner App sehr schlecht, da der auf jeder Seite neu definiert werden musste. Sonst geht er nicht.
